@@ -10,14 +10,14 @@ export const login = createAction(ActionTypes.Login);
 export const logout = createAction(ActionTypes.Logout);
 
 const INITIAL_STATE = {
-  user: JSON.parse(localStorage.getItem('nameThisAnimeUser')),
+  user: null,
 };
 
 export const reducer = createReducer(
   INITIAL_STATE,
   on(login, (state) => ({
     ...state,
-    user: JSON.parse(localStorage.getItem('nameThisAnimeUser')),
+    user: JSON.parse(localStorage.getItem('user')),
   })),
   on(logout, (state) => ({
     ...state,

@@ -1,5 +1,9 @@
-import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../service/auth.service';
+import { Component, OnInit } from '@angular/core';
+import { Store, select } from '@ngrx/store';
+import { Observable } from 'rxjs';
+
+import { login, logout } from '../ngrx';
 import { User } from 'firebase';
 
 @Component({
@@ -8,19 +12,29 @@ import { User } from 'firebase';
   styleUrls: ['./user.component.css'],
 })
 export class UserComponent implements OnInit {
-  user: User;
+  public user$: Observable<any>;
 
-  constructor(private authService: AuthService) {}
+  constructor(
+    private authService: AuthService,
+    private store: Store<{ user: User }>
+  ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.user$ = this.store.pipe(select('loginReducer'));
+  }
 
   loginWithGoogle() {
     this.authService.loginWithGoogle().then((user) => {
-      this.user = user;
+      localStorage.setItem('user', JSON.stringify(user));
+      this.store.dispatch(login());
+      console.log(this.store.select<User>((state) => state.user));
     });
   }
 
   logout() {
-    this.authService.logout().then((_) => (this.user = null));
+    this.authService.logout().then((_) => {
+      localStorage.removeItem('user');
+      this.store.dispatch(logout());
+    });
   }
 }

@@ -1,7 +1,7 @@
-<div *ngIf="!user; else userLogado">
+<div *ngIf="!(user$ | async).user; else userLogado">
   <button (click)="loginWithGoogle()">Login with google</button>
 </div>
 <ng-template #userLogado>
-  <h1>{{ user.displayName }}</h1>
+  <h1>{{ (user$ | async).user.displayName }}</h1>
   <button (click)="logout()">Logout</button>
 </ng-template>

@@ -7,14 +7,20 @@ import { AppComponent } from './app.component';
 import { environment } from 'src/environments/environment';
 import { UserComponent } from './user/user.component';
 import { RouterModule } from '@angular/router';
+import { AnotherComponentComponent } from './another-component/another-component.component';
+import { StoreModule } from '@ngrx/store';
+import { reducer as loginReducer } from './ngrx';
 
 @NgModule({
-  declarations: [AppComponent, UserComponent],
+  declarations: [AppComponent, UserComponent, AnotherComponentComponent],
   imports: [
     BrowserModule,
     AngularFireDatabaseModule,
     AngularFireModule.initializeApp(environment.config),
     RouterModule,
+    StoreModule.forRoot({
+      loginReducer,
+    }),
   ],
   providers: [],
   bootstrap: [AppComponent],
